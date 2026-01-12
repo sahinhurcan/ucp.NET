@@ -33,33 +33,17 @@ All controllers have clear TODO comments showing what needs to be implemented:
 - `UpdateOrder` - Update order status or fulfillment
 - `CancelOrder` - Process refund and restore inventory
 
-## Adding Your Database
+## Implementation Options
 
-Choose your preferred database:
+The TODO sections in controllers can be implemented in many ways:
 
-**SQL Server (Entity Framework Core):**
-```bash
-dotnet add package Microsoft.EntityFrameworkCore.SqlServer
-dotnet add package Microsoft.EntityFrameworkCore.Design
-```
+- **Database storage** - SQL Server, PostgreSQL, MongoDB, etc.
+- **External API calls** - Call your existing backend services
+- **In-memory storage** - For testing or simple scenarios
+- **Microservices** - Integrate with your service architecture
+- **Hybrid approach** - Combine multiple strategies
 
-**PostgreSQL:**
-```bash
-dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
-```
-
-**MongoDB:**
-```bash
-dotnet add package MongoDB.Driver
-```
-
-**Dapper (lightweight):**
-```bash
-dotnet add package Dapper
-dotnet add package Microsoft.Data.SqlClient
-```
-
-Then implement your data access logic in the TODO sections of each controller!
+There are no dependencies or assumptions - implement it however fits your architecture!
 
 ## UCP Protocol
 
@@ -69,10 +53,10 @@ This template implements the Universal Commerce Protocol (UCP):
 
 ## Next Steps
 
-1. Choose your database and add the NuGet package
-2. Implement the TODO sections in Controllers
-3. Add your authentication/authorization
-4. Configure your app settings
+1. Implement the TODO sections in Controllers with your business logic
+2. Add your authentication/authorization if needed
+3. Configure your app settings
+4. Test with Swagger UI
 5. Deploy to production!
 
 Ready to build! 🚀

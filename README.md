@@ -65,27 +65,17 @@ public async Task<IActionResult> CreateCheckout([FromBody] CheckoutCreateRequest
 }
 ```
 
-## 🔧 Add Your Database
+## 🔧 Implement Your Business Logic
 
-Choose any database technology:
+The template has TODO markers where you implement your business logic. You can:
 
-**Entity Framework Core:**
-```bash
-dotnet add package Microsoft.EntityFrameworkCore.SqlServer
-```
+- Store data in a database (SQL Server, PostgreSQL, MongoDB, etc.)
+- Make API calls to external services
+- Use in-memory storage
+- Integrate with existing systems
+- Any combination of the above
 
-**Dapper:**
-```bash
-dotnet add package Dapper
-dotnet add package Microsoft.Data.SqlClient
-```
-
-**MongoDB:**
-```bash
-dotnet add package MongoDB.Driver
-```
-
-Then implement the TODO sections!
+Simply fill in the TODO sections in each controller with your implementation!
 
 ## 📚 UCP Models Included
 
