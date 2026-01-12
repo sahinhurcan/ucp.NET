@@ -1,0 +1,6 @@
+@UCP.API_HostAddress = http://localhost:5255
+
+GET {{UCP.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
