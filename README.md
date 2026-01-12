@@ -11,6 +11,7 @@ Universal Commerce Protocol (UCP) is a new open standard developed by Google, Sh
 - ✅ **Complete UCP REST API** - All standard endpoints implemented
 - ✅ **UCP Discovery** - `/.well-known/ucp` merchant profile endpoint
 - ✅ **Checkout Sessions** - Create, get, update, complete, cancel
+- ✅ **Buyer Profiles** - Identity and saved payment method management
 - ✅ **Order Management** - Get and update orders
 - ✅ **Strongly-typed models** - Full C# models for all UCP types
 - ✅ **TODO-based implementation** - Clear markers for your business logic
@@ -41,6 +42,16 @@ All UCP REST API endpoints per the official specification:
 - `PUT /checkout-sessions/{id}` - Update checkout
 - `POST /checkout-sessions/{id}/complete` - Complete checkout and create order
 - `POST /checkout-sessions/{id}/cancel` - Cancel checkout session
+
+### Buyer Profiles (`/profiles`)
+- `POST /profiles` - Create buyer profile
+- `GET /profiles/{id}` - Get buyer profile
+- `PUT /profiles/{id}` - Update buyer profile
+- `DELETE /profiles/{id}` - Delete buyer profile
+- `POST /profiles/{id}/payment-methods` - Add payment method
+- `DELETE /profiles/{id}/payment-methods/{paymentMethodId}` - Remove payment method
+- `POST /profiles/{id}/addresses` - Add saved address
+- `DELETE /profiles/{id}/addresses/{addressId}` - Remove saved address
 
 ### Orders (`/orders`)
 - `GET /orders/{id}` - Get order details
@@ -82,6 +93,8 @@ Simply fill in the TODO sections in each controller with your implementation!
 All UCP protocol models in `UCP.NET` library:
 
 - `CheckoutCreateRequest` / `CheckoutUpdateRequest` / `CheckoutResponse`
+- `ProfileCreateRequest` / `ProfileUpdateRequest` / `ProfileResponse`
+- `BuyerIdentity` / `SavedPaymentMethod` / `SavedAddress`
 - `LineItem` / `LineItemResponse`
 - `Payment` / `PaymentResponse`
 - `Fulfillment` / `FulfillmentResponse`
