@@ -77,6 +77,30 @@ public class OrderSummary
 }
 
 /// <summary>
+/// Order update request
+/// </summary>
+public class OrderUpdateRequest
+{
+    /// <summary>
+    /// UCP protocol metadata
+    /// </summary>
+    [JsonPropertyName("ucp")]
+    public UcpMetadata? Ucp { get; set; }
+
+    /// <summary>
+    /// Order state update
+    /// </summary>
+    [JsonPropertyName("state")]
+    public string? State { get; set; }
+
+    /// <summary>
+    /// Fulfillment information update
+    /// </summary>
+    [JsonPropertyName("fulfillment")]
+    public FulfillmentUpdate? Fulfillment { get; set; }
+}
+
+/// <summary>
 /// Order information
 /// </summary>
 public class Order

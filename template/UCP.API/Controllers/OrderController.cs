@@ -45,7 +45,7 @@ public class OrderController : ControllerBase
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateOrder(string id, [FromBody] Order request)
+    public async Task<IActionResult> UpdateOrder(string id, [FromBody] OrderUpdateRequest request)
     {
         _logger.LogInformation("Updating order: {OrderId}", id);
 
@@ -56,6 +56,9 @@ public class OrderController : ControllerBase
         // 4. Save changes to database
         // 5. Notify customer of updates (email/SMS)
         // 6. Return updated order
+        
+        // Example: Google sends OrderUpdateRequest to update fulfillment status
+        // request.Fulfillment = { State = "shipped", TrackingNumber = "..." }
         
         throw new NotImplementedException("Implement order update in your business layer");
     }

@@ -34,7 +34,72 @@ public class CheckoutController : ControllerBase
         // 4. Save checkout session to your database
         // 5. Return checkout response with calculated values
         
-        throw new NotImplementedException("Implement checkout creation in your business layer");
+        // Example response structure (replace with your implementation):
+        var response = new CheckoutResponse
+        {
+            Ucp = request.Ucp,
+            Id = Guid.NewGuid().ToString(), // TODO: Generate your checkout ID
+            State = "pending",
+            LineItems = request.LineItems?.Select(item => new LineItemResponse
+            {
+                Id = item.Id,
+                Quantity = item.Quantity,
+                Item = new ItemResponse
+                {
+                    Name = item.Item?.Name,
+                    Description = item.Item?.Description,
+                    Url = item.Item?.Url,
+                    ImageUrl = item.Item?.ImageUrl,
+                    Sku = item.Id // TODO: Get actual SKU from your product catalog
+                },
+                Price = new Price
+                {
+                    Currency = "USD", // TODO: Get from your product catalog
+                    Value = 0, // TODO: Calculate actual price from your catalog
+                    Display = "$0.00"
+                }
+            }).ToList(),
+            Payment = new PaymentResponse
+            {
+                PaymentHandlers = new List<PaymentHandler>
+                {
+                    // TODO: Add your supported payment handlers
+                    new PaymentHandler
+                    {
+                        Id = "your-payment-handler",
+                        Name = "Your Payment Handler",
+                        SupportedMethods = new List<string> { "card" }
+                    }
+                },
+                State = "pending"
+            },
+            Fulfillment = new FulfillmentResponse
+            {
+                AvailableMethods = new List<FulfillmentMethod>
+                {
+                    // TODO: Add your fulfillment methods from your system
+                    new FulfillmentMethod
+                    {
+                        Id = "standard",
+                        Name = "Standard Shipping",
+                        Type = "shipping",
+                        Cost = new Price { Currency = "USD", Value = 0, Display = "$0.00" },
+                        EstimatedDelivery = "3-5 business days"
+                    }
+                },
+                State = "pending"
+            },
+            OrderSummary = new OrderSummary
+            {
+                Subtotal = new Price { Currency = "USD", Value = 0, Display = "$0.00" }, // TODO: Calculate
+                Tax = new Price { Currency = "USD", Value = 0, Display = "$0.00" }, // TODO: Calculate
+                Shipping = new Price { Currency = "USD", Value = 0, Display = "$0.00" },
+                Discounts = new Price { Currency = "USD", Value = 0, Display = "$0.00" },
+                Total = new Price { Currency = "USD", Value = 0, Display = "$0.00" } // TODO: Calculate
+            }
+        };
+
+        return CreatedAtAction(nameof(GetCheckout), new { id = response.Id }, response);
     }
 
     /// <summary>
@@ -51,6 +116,10 @@ public class CheckoutController : ControllerBase
         // 1. Retrieve checkout session from your database by id
         // 2. If not found, return NotFound()
         // 3. Return checkout details with current state
+        
+        // TODO: Replace with actual database retrieval
+        // Example: var checkout = await _database.Checkouts.FindAsync(id);
+        // if (checkout == null) return NotFound();
         
         throw new NotImplementedException("Implement checkout retrieval from your database");
     }
@@ -72,6 +141,17 @@ public class CheckoutController : ControllerBase
         // 4. Validate updated data
         // 5. Save changes to database
         // 6. Return updated checkout response
+        
+        // Example: Google sends CheckoutUpdateRequest with:
+        // - request.LineItems (update cart)
+        // - request.Payment (add payment method)
+        // - request.Fulfillment (select shipping)
+        
+        // TODO: Replace with actual update logic
+        // var checkout = await _database.Checkouts.FindAsync(id);
+        // if (checkout == null) return NotFound();
+        // Update checkout with request data...
+        // return Ok(checkoutResponse);
         
         throw new NotImplementedException("Implement checkout update in your business layer");
     }
@@ -95,6 +175,20 @@ public class CheckoutController : ControllerBase
         // 5. Update checkout state to 'completed'
         // 6. Send order confirmation email
         // 7. Return created order details
+        
+        // Example response structure (replace with your implementation):
+        // var order = new Order
+        // {
+        //     Ucp = new UcpMetadata { Version = "2026-01-11" },
+        //     Id = "order-" + Guid.NewGuid().ToString(),
+        //     State = "confirmed",
+        //     CreatedAt = DateTimeOffset.UtcNow,
+        //     UpdatedAt = DateTimeOffset.UtcNow,
+        //     LineItems = [...], // From checkout
+        //     OrderSummary = new OrderSummary { Total = ..., Tax = ..., Shipping = ... },
+        //     Fulfillment = new FulfillmentResponse { ... }
+        // };
+        // return Ok(order);
         
         throw new NotImplementedException("Implement checkout completion in your business layer");
     }

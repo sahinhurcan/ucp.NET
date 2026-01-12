@@ -29,16 +29,6 @@ All controllers have clear TODO comments showing what needs to be implemented:
 - `CompleteCheckout` - Process payment, create order, update inventory
 - `CancelCheckout` - Cancel checkout and release reserved inventory
 
-### ProfileController
-- `CreateProfile` - Create buyer profile with identity and saved data
-- `GetProfile` - Retrieve buyer profile from database
-- `UpdateProfile` - Update buyer identity, payment methods, addresses
-- `DeleteProfile` - Delete buyer profile (comply with privacy regulations)
-- `AddPaymentMethod` - Tokenize and save payment method
-- `RemovePaymentMethod` - Remove saved payment method
-- `AddAddress` - Save shipping/billing address
-- `RemoveAddress` - Remove saved address
-
 ### OrderController
 - `GetOrder` - Retrieve order details from database
 - `UpdateOrder` - Update order status or fulfillment
