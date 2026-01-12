@@ -24,6 +24,9 @@ jobs:
     - name: Build library
       run: dotnet build src/UCP.NET/UCP.NET.csproj --configuration Release --no-restore
     
+    - name: Restore example dependencies
+      run: dotnet restore examples/UCP.CleanArchitecture.sln
+    
     - name: Build example
       run: dotnet build examples/UCP.CleanArchitecture.sln --configuration Release --no-restore
     

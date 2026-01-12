@@ -39,7 +39,7 @@ public class AddItemToCartCommandHandler : IRequestHandler<AddItemToCartCommand,
         }
 
         cart.Subtotal = cart.Items.Sum(i => i.TotalPrice);
-        cart.Tax = cart.Subtotal * 0.1m; // 10% tax for example
+        cart.Tax = cart.Subtotal * 0.1m; // TODO: Replace with proper tax calculation service
         cart.Total = cart.Subtotal + cart.Tax;
         cart.UpdatedAt = DateTime.UtcNow;
 
