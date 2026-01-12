@@ -7,7 +7,7 @@ namespace UCP.API.Controllers;
 /// UCP Checkout API - Implements Universal Commerce Protocol checkout endpoints
 /// </summary>
 [ApiController]
-[Route("ucp/v1/checkout")]
+[Route("checkout-sessions")]
 [Produces("application/json")]
 public class CheckoutController : ControllerBase
 {
@@ -40,15 +40,15 @@ public class CheckoutController : ControllerBase
     /// <summary>
     /// Get checkout session by ID
     /// </summary>
-    [HttpGet("{checkoutId}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(CheckoutResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCheckout(string checkoutId)
+    public async Task<IActionResult> GetCheckout(string id)
     {
-        _logger.LogInformation("Retrieving checkout: {CheckoutId}", checkoutId);
+        _logger.LogInformation("Retrieving checkout: {CheckoutId}", id);
 
         // TODO: Implement your business logic here
-        // 1. Retrieve checkout session from your database by checkoutId
+        // 1. Retrieve checkout session from your database by id
         // 2. If not found, return NotFound()
         // 3. Return checkout details with current state
         
@@ -58,12 +58,12 @@ public class CheckoutController : ControllerBase
     /// <summary>
     /// Update checkout session
     /// </summary>
-    [HttpPatch("{checkoutId}")]
+    [HttpPut("{id}")]
     [ProducesResponseType(typeof(CheckoutResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateCheckout(string checkoutId, [FromBody] CheckoutUpdateRequest request)
+    public async Task<IActionResult> UpdateCheckout(string id, [FromBody] CheckoutUpdateRequest request)
     {
-        _logger.LogInformation("Updating checkout: {CheckoutId}", checkoutId);
+        _logger.LogInformation("Updating checkout: {CheckoutId}", id);
 
         // TODO: Implement your business logic here
         // 1. Retrieve existing checkout from database
@@ -79,13 +79,13 @@ public class CheckoutController : ControllerBase
     /// <summary>
     /// Complete checkout and create order
     /// </summary>
-    [HttpPost("{checkoutId}/complete")]
+    [HttpPost("{id}/complete")]
     [ProducesResponseType(typeof(Order), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CompleteCheckout(string checkoutId)
+    public async Task<IActionResult> CompleteCheckout(string id)
     {
-        _logger.LogInformation("Completing checkout: {CheckoutId}", checkoutId);
+        _logger.LogInformation("Completing checkout: {CheckoutId}", id);
 
         // TODO: Implement your business logic here
         // 1. Retrieve and validate checkout is ready (has payment, shipping, etc.)
@@ -97,5 +97,27 @@ public class CheckoutController : ControllerBase
         // 7. Return created order details
         
         throw new NotImplementedException("Implement checkout completion in your business layer");
+    }
+
+    /// <summary>
+    /// Cancel checkout session
+    /// </summary>
+    [HttpPost("{id}/cancel")]
+    [ProducesResponseType(typeof(CheckoutResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CancelCheckout(string id)
+    {
+        _logger.LogInformation("Cancelling checkout: {CheckoutId}", id);
+
+        // TODO: Implement your business logic here
+        // 1. Retrieve checkout session from database
+        // 2. Validate checkout can be cancelled (not already completed)
+        // 3. Update checkout state to 'cancelled'
+        // 4. Release any reserved inventory
+        // 5. Save changes to database
+        // 6. Return cancelled checkout response
+        
+        throw new NotImplementedException("Implement checkout cancellation in your business layer");
     }
 }
