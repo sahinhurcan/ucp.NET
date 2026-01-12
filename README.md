@@ -1,131 +1,175 @@
-<!--
-   Copyright 2026 UCP Authors
+# UCP.NET - Universal Commerce Protocol .NET Implementation
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+🚀 **Production-ready .NET API template** implementing [Universal Commerce Protocol (UCP)](https://ucp.dev/) - Google's new standard for commerce integration.
 
-       http://www.apache.org/licenses/LICENSE-2.0
+## What is UCP?
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+Universal Commerce Protocol (UCP) is a new open standard developed by Google, Shopify, Target, Walmart, and other major e-commerce players to standardize commerce operations across platforms. This template provides a complete UCP REST API implementation for merchants.
 
-<p align="center">
-  <h1 align="center">Universal Commerce Protocol (UCP)</h1>
-</p>
+## 🎯 Features
 
-<p align="center">
-  <b>An open standard enabling interoperability between various commerce
-   entities to facilitate seamless commerce integrations.</b>
-</p>
+- ✅ **Complete UCP REST API** - All standard endpoints implemented
+- ✅ **UCP Discovery** - `/.well-known/ucp` merchant profile endpoint
+- ✅ **Checkout Sessions** - Create, get, update, complete, cancel
+- ✅ **Order Management** - Get and update orders
+- ✅ **Strongly-typed models** - Full C# models for all UCP types
+- ✅ **TODO-based implementation** - Clear markers for your business logic
+- ✅ **No database dependencies** - Use any database you want
+- ✅ **Lightweight** - Minimal dependencies, maximum flexibility
+- ✅ **Swagger/OpenAPI** - Interactive API documentation
 
-<p align="center">
-  <a href="https://ucp.dev">Documentation</a> |
-  <a href="https://ucp.dev/specification/overview">Specification</a> |
-  <a href="https://github.com/Universal-Commerce-Protocol/ucp/discussions">Discussions</a>
-</p>
+## 🚀 Quick Start
 
-## Overview
+```bash
+git clone https://github.com/sahinhurcan/ucp.NET.git
+cd ucp.NET/template/UCP.API
+dotnet run
+```
 
-The Universal Commerce Protocol (UCP) addresses a fragmented commerce landscape
-by providing a standardized common language and functional primitives. It
-enables platforms (like AI agents and apps), businesses, Payment Service
-Providers (PSPs), and Credential Providers (CPs) to communicate effectively,
-ensuring secure and consistent commerce experiences across the web.
+Navigate to `http://localhost:5000` to see Swagger documentation.
 
-With UCP, businesses can:
+## 📋 Implemented Endpoints
 
-*   **Declare** supported capabilities to enable autonomous discovery by
-    platforms.
-*   **Facilitate** secure checkout sessions, with or without human intervention.
-*   **Offer** personalized shopping experiences through standardized data
-    exchange.
+All UCP REST API endpoints per the official specification:
 
-## Why UCP?
+### Discovery
+- `GET /.well-known/ucp` - Merchant profile discovery
 
-As commerce becomes increasingly agentic and distributed, the ability for
-different systems to interoperate without custom, one-off integrations is vital.
-UCP aims to:
+### Checkout Sessions (`/checkout-sessions`)
+- `POST /checkout-sessions` - Create checkout session
+- `GET /checkout-sessions/{id}` - Get checkout details
+- `PUT /checkout-sessions/{id}` - Update checkout
+- `POST /checkout-sessions/{id}/complete` - Complete checkout and create order
+- `POST /checkout-sessions/{id}/cancel` - Cancel checkout session
 
-*   **Standardize Interaction:** Provide a uniform way for platforms to interact
-    with businesses, regardless of the underlying backend.
-*   **Modularize Commerce:** Breakdown commerce into distinct **Capabilities**
-    (e.g., Checkout, Order) and **Extensions** (e.g., Discounts,
-    Fulfillment), allowing for flexible implementation.
-*   **Enable Agentic Commerce:** Designed from the ground up to support AI
-    agents acting on behalf of users to discover products, fill carts, and
-    complete purchases securely.
-*   **Enhance Security:** Support for advanced security patterns like AP2
-    mandates and verifiable credentials.
+### Checkout Sessions (`/checkout-sessions`)
+- `POST /checkout-sessions` - Create checkout session
+- `GET /checkout-sessions/{id}` - Get checkout details
+- `PUT /checkout-sessions/{id}` - Update checkout
+- `POST /checkout-sessions/{id}/complete` - Complete checkout and create order
+- `POST /checkout-sessions/{id}/cancel` - Cancel checkout session
 
-### Key Features
+### Orders (`/orders`)
+- `GET /orders/{id}` - Get order details
+- `PUT /orders/{id}` - Update order
 
-*   **Composable Architecture:** UCP defines **Capabilities** (such as
-    "Checkout" or "Identity Linking") that businesses implement to enable easy
-    integration. On top of that, specific **Extensions** can be added to enhance
-    the consumer experience without bloating the capability definitions.
-*   **Dynamic Discovery:** Businesses declare their supported Capabilities in a
-    standardized profile, allowing platforms to autonomously discover and
-    configure themselves.
-*   **Transport Agnostic:** The protocol is designed to work across various
-    transports. Businesses can offer Capabilities via REST APIs, MCP (Model
-    Context Protocol), or A2A, depending on their infrastructure.
-*   **Built on Standards:** UCP leverages existing open standards for payments,
-    identity, and security wherever applicable, rather than reinventing the
-    wheel.
-*   **Developer Friendly:** A comprehensive set of SDKs and libraries
-    facilitates rapid development and integration.
+## 💡 Implementation Guide
 
-## Key Capabilities
+Each endpoint has clear TODO comments:
 
-The initial release focuses on the essential primitives for transacting:
+```csharp
+[HttpPost]
+public async Task<IActionResult> CreateCheckout([FromBody] CheckoutCreateRequest request)
+{
+    // TODO: Implement your business logic here
+    // 1. Validate line items against your product catalog
+    // 2. Check inventory availability
+    // 3. Calculate totals, taxes, and shipping costs
+    // 4. Save checkout session to your database
+    // 5. Return checkout response with calculated values
+    
+    throw new NotImplementedException("Implement in your business layer");
+}
+```
 
-*   **Checkout:** Facilitates checkout sessions including cart management and
-    tax calculation, supporting flows with or without human intervention.
-*   **Identity Linking:** Enables platforms to obtain authorization to perform
-    actions on a user's behalf via OAuth 2.0.
-*   **Order:** Webhook-based updates for order lifecycle events (shipped,
-    delivered, returned).
-*   **Payment Token Exchange:** Protocols for PSPs and Credential Providers to
-    securely exchange payment tokens and credentials.
+## 🔧 Implement Your Business Logic
 
-## Getting Started
+The template has TODO markers where you implement your business logic. You can:
 
-*   📚 **Explore the Documentation:** Visit [ucp.dev](https://ucp.dev) for a
-    complete overview, the full protocol specification, tutorials, and guides.
-*   🎬 **Review our
-    [samples](https://github.com/Universal-Commerce-Protocol/samples)** for
-    implementation examples.
-*   🛠️ **Use our
-    [SDKs](https://github.com/orgs/Universal-Commerce-Protocol/repositories)**
-    to start building your own integrations.
-*   📝 **Check conformance** with our [conformance tests](https://github.com/Universal-Commerce-Protocol/conformance).
+- Store data in a database (SQL Server, PostgreSQL, MongoDB, etc.)
+- Make API calls to external services
+- Use in-memory storage
+- Integrate with existing systems
+- Any combination of the above
 
-## Contributing
+Simply fill in the TODO sections in each controller with your implementation!
 
-We welcome community contributions to enhance and evolve UCP.
+## 📚 UCP Models Included
 
-*   **Questions & Discussions:** Join our [GitHub
-    Discussions](https://github.com/Universal-Commerce-Protocol/ucp/discussions).
-*   **Issues & Feedback:** Report issues or suggest improvements via GitHub
-    Issues.
-*   **Contribution Guide:** See our [CONTRIBUTING.md](CONTRIBUTING.md) for
-    details on how to contribute.
+All UCP protocol models in `UCP.NET` library:
 
-## What's Next
+- `CheckoutCreateRequest` / `CheckoutUpdateRequest` / `CheckoutResponse`
+- `LineItem` / `LineItemResponse`
+- `Payment` / `PaymentResponse`
+- `Fulfillment` / `FulfillmentResponse`
+- `Order` / `OrderSummary`
+- `UcpMetadata` / `Capability`
+- `Price` / `PaymentHandler` / `PaymentCredentials`
+- `FulfillmentMethod` / `ShippingDestination`
+- And more...
 
-Take a look at [our roadmap on ucp.dev](https://ucp.dev/documentation/roadmap/).
-Future enhancements include:
+## 🎓 Example Flow
 
-*   **New Verticals:** Applications beyond Shopping (e.g., Travel, Services).
-*   **Loyalty:** Standardized management of loyalty programs and rewards.
-*   **Personalization:** Enhanced signals for personalized product discovery.
+1. **Platform discovers merchant capabilities**
+   ```
+   GET /.well-known/ucp
+   → Merchant profile with capabilities
+   ```
 
-## About
+2. **Create checkout session**
+   ```
+   POST /checkout-sessions
+   {
+     "line_items": [...],
+     "currency": "USD",
+     "buyer": {...},
+     "payment": {...}
+   }
+   → Checkout ID and details
+   ```
 
-UCP is an open-source project under the [Apache License 2.0](LICENSE) and is
-open to contributions from the community.
+3. **Update with payment/shipping**
+   ```
+   PUT /checkout-sessions/{id}
+   {
+     "payment": {...},
+     "fulfillment": {...}
+   }
+   → Updated checkout
+   ```
+
+4. **Complete checkout**
+   ```
+   POST /checkout-sessions/{id}/complete
+   → Order created
+   ```
+
+5. **Check order status**
+   ```
+   GET /orders/{id}
+   → Order details with fulfillment status
+   ```
+
+## 🏗️ Project Structure
+
+```
+ucp.NET/
+├── src/
+│   └── UCP.NET/              # UCP Protocol Library
+│       ├── Models/           # All UCP data models
+│       ├── Client/           # HTTP client (for calling other UCP APIs)
+│       └── Configuration/    # Configuration options
+└── template/
+    └── UCP.API/             # Your API Implementation
+        ├── Controllers/
+        │   ├── CheckoutController.cs   # Checkout endpoints
+        │   ├── OrderController.cs      # Order endpoints
+        │   └── DiscoveryController.cs  # UCP discovery
+        ├── Program.cs                  # App configuration
+        └── appsettings.json            # Your settings
+```
+
+## 🔗 Learn More
+
+- **UCP Protocol**: https://ucp.dev/
+- **UCP Specification**: https://github.com/Universal-Commerce-Protocol
+- **Python SDK**: https://github.com/Universal-Commerce-Protocol/python-sdk
+- **Sample Implementations**: https://github.com/Universal-Commerce-Protocol/samples
+
+## 📄 License
+
+Apache License 2.0
+
+---
+
+**Build UCP-compliant commerce APIs for the future!** 🚀

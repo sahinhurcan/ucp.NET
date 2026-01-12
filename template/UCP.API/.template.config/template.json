@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Sahin Hurcan",
+  "classifications": [ "Web", "API", "UCP", "E-Commerce" ],
+  "identity": "UCP.NET.API.Template",
+  "name": "UCP.NET API",
+  "shortName": "ucpapi",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "UCP.API",
+  "preferNameDirectory": true,
+  "description": "A ready-to-use ASP.NET Core Web API template implementing Universal Commerce Protocol (UCP) with TODO-based business logic placeholders."
+}

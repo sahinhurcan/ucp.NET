@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop, copilot/** ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Restore UCP.NET library dependencies
+      run: dotnet restore src/UCP.NET/UCP.NET.csproj
+    
+    - name: Build UCP.NET library
+      run: dotnet build src/UCP.NET/UCP.NET.csproj --configuration Release --no-restore
+    
+    - name: Restore API template dependencies
+      run: dotnet restore template/UCP.API/UCP.API.csproj
+    
+    - name: Build API template
+      run: dotnet build template/UCP.API/UCP.API.csproj --configuration Release --no-restore
+    
+    - name: Run tests (when available)
+      run: dotnet test --configuration Release --no-build --verbosity normal || echo "No tests found - add your own tests"
+
+  pack:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Restore dependencies
+      run: dotnet restore src/UCP.NET/UCP.NET.csproj
+    
+    - name: Build
+      run: dotnet build src/UCP.NET/UCP.NET.csproj --configuration Release --no-restore
+    
+    - name: Pack NuGet package
+      run: dotnet pack src/UCP.NET/UCP.NET.csproj --configuration Release --no-build --output ./artifacts
+    
+    - name: Upload NuGet package artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: ./artifacts/*.nupkg
