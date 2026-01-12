@@ -1,23 +1,24 @@
 # UCP.NET - Universal Commerce Protocol .NET Implementation
 
-🚀 **Ready-to-use .NET API template** for implementing [Universal Commerce Protocol (UCP)](https://ucp.dev/) in your e-commerce applications.
+🚀 **Production-ready .NET API template** implementing [Universal Commerce Protocol (UCP)](https://ucp.dev/) - Google's new standard for commerce integration.
 
-## What is This?
+## What is UCP?
 
-This is a **production-ready API template** that implements the complete UCP REST API specification. All endpoints are ready with proper request/response models - you just need to implement your own business logic.
+Universal Commerce Protocol (UCP) is a new open standard developed by Google, Shopify, Target, Walmart, and other major e-commerce players to standardize commerce operations across platforms. This template provides a complete UCP REST API implementation for merchants.
 
 ## 🎯 Features
 
-- ✅ **Complete UCP REST API** - All checkout and order endpoints
+- ✅ **Complete UCP REST API** - All standard endpoints implemented
+- ✅ **UCP Discovery** - `/.well-known/ucp` merchant profile endpoint
+- ✅ **Checkout Sessions** - Create, get, update, complete, cancel
+- ✅ **Order Management** - Get and update orders
 - ✅ **Strongly-typed models** - Full C# models for all UCP types
-- ✅ **TODO-based implementation** - Clear markers where you add your business logic
-- ✅ **Swagger/OpenAPI** - Interactive API documentation
+- ✅ **TODO-based implementation** - Clear markers for your business logic
 - ✅ **No database dependencies** - Use any database you want
 - ✅ **Lightweight** - Minimal dependencies, maximum flexibility
+- ✅ **Swagger/OpenAPI** - Interactive API documentation
 
 ## 🚀 Quick Start
-
-### Option 1: Clone and Use
 
 ```bash
 git clone https://github.com/sahinhurcan/ucp.NET.git
@@ -27,33 +28,27 @@ dotnet run
 
 Navigate to `http://localhost:5000` to see Swagger documentation.
 
-### Option 2: Use as Template
-
-```bash
-# Copy the template folder to your project
-cp -r template/UCP.API ./MyUcpApi
-cd MyUcpApi
-dotnet run
-```
-
 ## 📋 Implemented Endpoints
 
-All UCP REST API endpoints are ready:
+All UCP REST API endpoints per the official specification:
 
-### Checkout API (`/ucp/v1/checkout`)
-- `POST /ucp/v1/checkout` - Create checkout session
-- `GET /ucp/v1/checkout/{id}` - Get checkout details
-- `PATCH /ucp/v1/checkout/{id}` - Update checkout
-- `POST /ucp/v1/checkout/{id}/complete` - Complete checkout and create order
+### Discovery
+- `GET /.well-known/ucp` - Merchant profile discovery
 
-### Order API (`/ucp/v1/orders`)
-- `GET /ucp/v1/orders/{id}` - Get order details
-- `PATCH /ucp/v1/orders/{id}` - Update order
-- `POST /ucp/v1/orders/{id}/cancel` - Cancel order
+### Checkout Sessions (`/checkout-sessions`)
+- `POST /checkout-sessions` - Create checkout session
+- `GET /checkout-sessions/{id}` - Get checkout details
+- `PUT /checkout-sessions/{id}` - Update checkout
+- `POST /checkout-sessions/{id}/complete` - Complete checkout and create order
+- `POST /checkout-sessions/{id}/cancel` - Cancel checkout session
 
-## 💡 How to Implement Your Business Logic
+### Orders (`/orders`)
+- `GET /orders/{id}` - Get order details
+- `PUT /orders/{id}` - Update order
 
-Each endpoint has clear TODO comments showing what you need to implement:
+## 💡 Implementation Guide
+
+Each endpoint has clear TODO comments:
 
 ```csharp
 [HttpPost]
@@ -72,89 +67,106 @@ public async Task<IActionResult> CreateCheckout([FromBody] CheckoutCreateRequest
 
 ## 🔧 Add Your Database
 
-The template is database-agnostic. Add whatever you need:
+Choose any database technology:
 
-### Entity Framework Core
+**Entity Framework Core:**
 ```bash
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 ```
 
-### Dapper
+**Dapper:**
 ```bash
 dotnet add package Dapper
 dotnet add package Microsoft.Data.SqlClient
 ```
 
-### MongoDB
+**MongoDB:**
 ```bash
 dotnet add package MongoDB.Driver
 ```
 
-Then implement your data access in the TODO sections!
+Then implement the TODO sections!
 
 ## 📚 UCP Models Included
 
-All UCP protocol models are included in the `UCP.NET` library:
+All UCP protocol models in `UCP.NET` library:
 
 - `CheckoutCreateRequest` / `CheckoutUpdateRequest` / `CheckoutResponse`
 - `LineItem` / `LineItemResponse`
 - `Payment` / `PaymentResponse`
 - `Fulfillment` / `FulfillmentResponse`
 - `Order` / `OrderSummary`
-- `UcpMetadata`
+- `Buyer` / `BuyerInfo`
+- `Discount` / `DiscountApplication`
 - And many more...
+
+## 🎓 Example Flow
+
+1. **Platform discovers merchant capabilities**
+   ```
+   GET /.well-known/ucp
+   → Merchant profile with capabilities
+   ```
+
+2. **Create checkout session**
+   ```
+   POST /checkout-sessions
+   {
+     "line_items": [...],
+     "currency": "USD",
+     "buyer": {...},
+     "payment": {...}
+   }
+   → Checkout ID and details
+   ```
+
+3. **Update with payment/shipping**
+   ```
+   PUT /checkout-sessions/{id}
+   {
+     "payment": {...},
+     "fulfillment": {...}
+   }
+   → Updated checkout
+   ```
+
+4. **Complete checkout**
+   ```
+   POST /checkout-sessions/{id}/complete
+   → Order created
+   ```
+
+5. **Check order status**
+   ```
+   GET /orders/{id}
+   → Order details with fulfillment status
+   ```
 
 ## 🏗️ Project Structure
 
 ```
 ucp.NET/
 ├── src/
-│   └── UCP.NET/              # UCP protocol models and types
+│   └── UCP.NET/              # UCP Protocol Library
 │       ├── Models/           # All UCP data models
 │       ├── Client/           # HTTP client (for calling other UCP APIs)
 │       └── Configuration/    # Configuration options
 └── template/
-    └── UCP.API/             # Your API implementation
-        ├── Controllers/      # UCP REST endpoints
-        ├── Program.cs        # App configuration
-        └── appsettings.json  # Configuration
+    └── UCP.API/             # Your API Implementation
+        ├── Controllers/
+        │   ├── CheckoutController.cs   # Checkout endpoints
+        │   ├── OrderController.cs      # Order endpoints
+        │   └── DiscoveryController.cs  # UCP discovery
+        ├── Program.cs                  # App configuration
+        └── appsettings.json            # Your settings
 ```
-
-## 🎓 Example Implementation Flow
-
-1. **Customer creates checkout**
-   ```
-   POST /ucp/v1/checkout
-   → You: Validate products, calculate totals, save to DB
-   → Return: Checkout ID and details
-   ```
-
-2. **Customer updates payment/shipping**
-   ```
-   PATCH /ucp/v1/checkout/{id}
-   → You: Update checkout, recalculate, save to DB
-   → Return: Updated checkout
-   ```
-
-3. **Customer completes checkout**
-   ```
-   POST /ucp/v1/checkout/{id}/complete
-   → You: Process payment, create order, update inventory
-   → Return: Order details
-   ```
-
-4. **Retrieve order**
-   ```
-   GET /ucp/v1/orders/{id}
-   → You: Fetch from DB
-   → Return: Order with status
-   ```
 
 ## 🔗 Learn More
 
 - **UCP Protocol**: https://ucp.dev/
-- **UCP Spec**: https://github.com/Universal-Commerce-Protocol
+- **UCP Specification**: https://github.com/Universal-Commerce-Protocol
 - **Python SDK**: https://github.com/Universal-Commerce-Protocol/python-sdk
+- **Sample Implementations**: https://github.com/Universal-Commerce-Protocol/samples
 
 ## 📄 License
 
@@ -162,4 +174,4 @@ Apache License 2.0
 
 ---
 
-**Ready to build your UCP-compliant e-commerce API?** Start implementing your business logic now! 🚀
+**Build UCP-compliant commerce APIs for the future!** 🚀

@@ -38,6 +38,9 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+// TODO: Enable UCP header validation in production
+// app.UseUcpHeaderValidation();
+
 app.UseAuthorization();
 app.MapControllers();
 
