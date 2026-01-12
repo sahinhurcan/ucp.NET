@@ -121,7 +121,59 @@ public class CheckoutController : ControllerBase
         // Example: var checkout = await _database.Checkouts.FindAsync(id);
         // if (checkout == null) return NotFound();
         
-        throw new NotImplementedException("Implement checkout retrieval from your database");
+        // Dummy response - replace with your actual data
+        var response = new CheckoutResponse
+        {
+            Ucp = new UcpMetadata { Version = "2026-01-11" },
+            Id = id,
+            State = "pending",
+            LineItems = new List<LineItemResponse>
+            {
+                new LineItemResponse
+                {
+                    Id = "item-1",
+                    Quantity = 1,
+                    Item = new ItemResponse
+                    {
+                        Name = "Sample Product",
+                        Description = "This is a sample product",
+                        Sku = "SKU-001"
+                    },
+                    Price = new Price { Currency = "USD", Value = 2999, Display = "$29.99" }
+                }
+            },
+            Payment = new PaymentResponse
+            {
+                PaymentHandlers = new List<PaymentHandler>
+                {
+                    new PaymentHandler { Id = "payment-handler-1", Name = "Sample Payment", SupportedMethods = new List<string> { "card" } }
+                },
+                State = "pending"
+            },
+            Fulfillment = new FulfillmentResponse
+            {
+                AvailableMethods = new List<FulfillmentMethod>
+                {
+                    new FulfillmentMethod
+                    {
+                        Id = "standard",
+                        Name = "Standard Shipping",
+                        Type = "shipping",
+                        Cost = new Price { Currency = "USD", Value = 999, Display = "$9.99" }
+                    }
+                },
+                State = "pending"
+            },
+            OrderSummary = new OrderSummary
+            {
+                Subtotal = new Price { Currency = "USD", Value = 2999, Display = "$29.99" },
+                Tax = new Price { Currency = "USD", Value = 270, Display = "$2.70" },
+                Shipping = new Price { Currency = "USD", Value = 999, Display = "$9.99" },
+                Total = new Price { Currency = "USD", Value = 4268, Display = "$42.68" }
+            }
+        };
+
+        return Ok(response);
     }
 
     /// <summary>
@@ -151,9 +203,57 @@ public class CheckoutController : ControllerBase
         // var checkout = await _database.Checkouts.FindAsync(id);
         // if (checkout == null) return NotFound();
         // Update checkout with request data...
-        // return Ok(checkoutResponse);
         
-        throw new NotImplementedException("Implement checkout update in your business layer");
+        // Dummy response - replace with your actual updated data
+        var response = new CheckoutResponse
+        {
+            Ucp = new UcpMetadata { Version = "2026-01-11" },
+            Id = id,
+            State = "pending",
+            LineItems = request.LineItems?.Select(item => new LineItemResponse
+            {
+                Id = item.Id,
+                Quantity = item.Quantity ?? 1,
+                Item = new ItemResponse
+                {
+                    Name = "Updated Product",
+                    Description = "Product after update",
+                    Sku = item.Id
+                },
+                Price = new Price { Currency = "USD", Value = 2999, Display = "$29.99" }
+            }).ToList() ?? new List<LineItemResponse>(),
+            Payment = new PaymentResponse
+            {
+                PaymentHandlers = new List<PaymentHandler>
+                {
+                    new PaymentHandler { Id = "payment-handler-1", Name = "Sample Payment", SupportedMethods = new List<string> { "card" } }
+                },
+                State = request.Payment != null ? "selected" : "pending"
+            },
+            Fulfillment = new FulfillmentResponse
+            {
+                AvailableMethods = new List<FulfillmentMethod>
+                {
+                    new FulfillmentMethod
+                    {
+                        Id = "standard",
+                        Name = "Standard Shipping",
+                        Type = "shipping",
+                        Cost = new Price { Currency = "USD", Value = 999, Display = "$9.99" }
+                    }
+                },
+                State = request.Fulfillment != null ? "selected" : "pending"
+            },
+            OrderSummary = new OrderSummary
+            {
+                Subtotal = new Price { Currency = "USD", Value = 2999, Display = "$29.99" },
+                Tax = new Price { Currency = "USD", Value = 270, Display = "$2.70" },
+                Shipping = new Price { Currency = "USD", Value = 999, Display = "$9.99" },
+                Total = new Price { Currency = "USD", Value = 4268, Display = "$42.68" }
+            }
+        };
+
+        return Ok(response);
     }
 
     /// <summary>
@@ -176,21 +276,50 @@ public class CheckoutController : ControllerBase
         // 6. Send order confirmation email
         // 7. Return created order details
         
-        // Example response structure (replace with your implementation):
-        // var order = new Order
-        // {
-        //     Ucp = new UcpMetadata { Version = "2026-01-11" },
-        //     Id = "order-" + Guid.NewGuid().ToString(),
-        //     State = "confirmed",
-        //     CreatedAt = DateTimeOffset.UtcNow,
-        //     UpdatedAt = DateTimeOffset.UtcNow,
-        //     LineItems = [...], // From checkout
-        //     OrderSummary = new OrderSummary { Total = ..., Tax = ..., Shipping = ... },
-        //     Fulfillment = new FulfillmentResponse { ... }
-        // };
-        // return Ok(order);
-        
-        throw new NotImplementedException("Implement checkout completion in your business layer");
+        // Dummy response - replace with your actual order creation
+        var order = new Order
+        {
+            Ucp = new UcpMetadata { Version = "2026-01-11" },
+            Id = "order-" + Guid.NewGuid().ToString(),
+            State = "confirmed",
+            CreatedAt = DateTimeOffset.UtcNow,
+            UpdatedAt = DateTimeOffset.UtcNow,
+            LineItems = new List<LineItemResponse>
+            {
+                new LineItemResponse
+                {
+                    Id = "item-1",
+                    Quantity = 1,
+                    Item = new ItemResponse
+                    {
+                        Name = "Sample Product",
+                        Description = "This is a sample product",
+                        Sku = "SKU-001"
+                    },
+                    Price = new Price { Currency = "USD", Value = 2999, Display = "$29.99" }
+                }
+            },
+            OrderSummary = new OrderSummary
+            {
+                Subtotal = new Price { Currency = "USD", Value = 2999, Display = "$29.99" },
+                Tax = new Price { Currency = "USD", Value = 270, Display = "$2.70" },
+                Shipping = new Price { Currency = "USD", Value = 999, Display = "$9.99" },
+                Total = new Price { Currency = "USD", Value = 4268, Display = "$42.68" }
+            },
+            Fulfillment = new FulfillmentResponse
+            {
+                SelectedMethod = new FulfillmentMethod
+                {
+                    Id = "standard",
+                    Name = "Standard Shipping",
+                    Type = "shipping",
+                    Cost = new Price { Currency = "USD", Value = 999, Display = "$9.99" }
+                },
+                State = "pending"
+            }
+        };
+
+        return Ok(order);
     }
 
     /// <summary>
@@ -212,6 +341,24 @@ public class CheckoutController : ControllerBase
         // 5. Save changes to database
         // 6. Return cancelled checkout response
         
-        throw new NotImplementedException("Implement checkout cancellation in your business layer");
+        // Dummy response - replace with your actual cancellation logic
+        var response = new CheckoutResponse
+        {
+            Ucp = new UcpMetadata { Version = "2026-01-11" },
+            Id = id,
+            State = "cancelled",
+            LineItems = new List<LineItemResponse>(),
+            Payment = new PaymentResponse { State = "cancelled" },
+            Fulfillment = new FulfillmentResponse { State = "cancelled" },
+            OrderSummary = new OrderSummary
+            {
+                Subtotal = new Price { Currency = "USD", Value = 0, Display = "$0.00" },
+                Tax = new Price { Currency = "USD", Value = 0, Display = "$0.00" },
+                Shipping = new Price { Currency = "USD", Value = 0, Display = "$0.00" },
+                Total = new Price { Currency = "USD", Value = 0, Display = "$0.00" }
+            }
+        };
+
+        return Ok(response);
     }
 }

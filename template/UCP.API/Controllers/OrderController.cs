@@ -36,7 +36,54 @@ public class OrderController : ControllerBase
         // 5. If not found, return NotFound()
         // 6. Return complete order details
         
-        throw new NotImplementedException("Implement order retrieval from your database");
+        // TODO: Replace with actual database retrieval
+        // Example: var order = await _database.Orders.FindAsync(id);
+        // if (order == null) return NotFound();
+        
+        // Dummy response - replace with your actual data
+        var order = new Order
+        {
+            Ucp = new UcpMetadata { Version = "2026-01-11" },
+            Id = id,
+            State = "confirmed",
+            CreatedAt = DateTimeOffset.UtcNow.AddHours(-1),
+            UpdatedAt = DateTimeOffset.UtcNow,
+            LineItems = new List<LineItemResponse>
+            {
+                new LineItemResponse
+                {
+                    Id = "item-1",
+                    Quantity = 1,
+                    Item = new ItemResponse
+                    {
+                        Name = "Sample Product",
+                        Description = "This is a sample product",
+                        Sku = "SKU-001"
+                    },
+                    Price = new Price { Currency = "USD", Value = 2999, Display = "$29.99" }
+                }
+            },
+            OrderSummary = new OrderSummary
+            {
+                Subtotal = new Price { Currency = "USD", Value = 2999, Display = "$29.99" },
+                Tax = new Price { Currency = "USD", Value = 270, Display = "$2.70" },
+                Shipping = new Price { Currency = "USD", Value = 999, Display = "$9.99" },
+                Total = new Price { Currency = "USD", Value = 4268, Display = "$42.68" }
+            },
+            Fulfillment = new FulfillmentResponse
+            {
+                SelectedMethod = new FulfillmentMethod
+                {
+                    Id = "standard",
+                    Name = "Standard Shipping",
+                    Type = "shipping",
+                    Cost = new Price { Currency = "USD", Value = 999, Display = "$9.99" }
+                },
+                State = "pending"
+            }
+        };
+
+        return Ok(order);
     }
 
     /// <summary>
@@ -60,6 +107,54 @@ public class OrderController : ControllerBase
         // Example: Google sends OrderUpdateRequest to update fulfillment status
         // request.Fulfillment = { State = "shipped", TrackingNumber = "..." }
         
-        throw new NotImplementedException("Implement order update in your business layer");
+        // TODO: Replace with actual update logic
+        // var order = await _database.Orders.FindAsync(id);
+        // if (order == null) return NotFound();
+        // Apply updates from request...
+        
+        // Dummy response - replace with your actual updated data
+        var order = new Order
+        {
+            Ucp = new UcpMetadata { Version = "2026-01-11" },
+            Id = id,
+            State = request.State ?? "confirmed",
+            CreatedAt = DateTimeOffset.UtcNow.AddHours(-1),
+            UpdatedAt = DateTimeOffset.UtcNow,
+            LineItems = new List<LineItemResponse>
+            {
+                new LineItemResponse
+                {
+                    Id = "item-1",
+                    Quantity = 1,
+                    Item = new ItemResponse
+                    {
+                        Name = "Sample Product",
+                        Description = "This is a sample product",
+                        Sku = "SKU-001"
+                    },
+                    Price = new Price { Currency = "USD", Value = 2999, Display = "$29.99" }
+                }
+            },
+            OrderSummary = new OrderSummary
+            {
+                Subtotal = new Price { Currency = "USD", Value = 2999, Display = "$29.99" },
+                Tax = new Price { Currency = "USD", Value = 270, Display = "$2.70" },
+                Shipping = new Price { Currency = "USD", Value = 999, Display = "$9.99" },
+                Total = new Price { Currency = "USD", Value = 4268, Display = "$42.68" }
+            },
+            Fulfillment = new FulfillmentResponse
+            {
+                SelectedMethod = new FulfillmentMethod
+                {
+                    Id = "standard",
+                    Name = "Standard Shipping",
+                    Type = "shipping",
+                    Cost = new Price { Currency = "USD", Value = 999, Display = "$9.99" }
+                },
+                State = "shipped" // TODO: Use actual fulfillment state from your system
+            }
+        };
+
+        return Ok(order);
     }
 }
