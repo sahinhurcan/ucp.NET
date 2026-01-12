@@ -1,113 +1,19 @@
-#   Copyright 2026 Google LLC
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
+#   This workflow is disabled as the repository has been transformed
+#   from a specification repository into a .NET API implementation template.
+#   The UCP specification files have been removed and replaced with
+#   a production-ready API template.
 
-name: Docs Build and Deploy
+name: Docs Build and Deploy (Disabled)
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/docs.yml"
-      - "requirements-docs.txt"
-      - "mkdocs.yml"
-      - "main.py"
-      - "docs/**"
-      - "spec/**"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/docs.yml"
-      - "requirements-docs.txt"
-      - "mkdocs.yml"
-      - "main.py"
-      - "docs/**"
-      - "spec/**"
+  workflow_dispatch:  # Manual trigger only
 
 jobs:
-  build_and_deploy:
+  disabled:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      actions: read
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-
-      - name: Configure Git Credentials
+      - name: Repository Transformed
         run: |
-          git config --global user.name github-actions[bot]
-          git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
-
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libcairo2-dev libfreetype6-dev libffi-dev libjpeg-dev libpng-dev libz-dev
-
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: 3.13
-
-      - name: Restore pip cache
-        uses: actions/cache@v4
-        with:
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-docs.txt') }}
-          path: ~/.cache/pip
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Install documentation dependencies
-        run: pip install -r requirements-docs.txt
-
-      - name: Lint YAML files
-        run: yamllint -c .github/linters/.yamllint.yml .
-
-      - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
-
-      - name: Check for changed files in spec
-        id: spec_files_changed
-        uses: tj-actions/changed-files@v46
-        with:
-          files: spec/**
-
-      - name: Check Python SDK Models Consistency
-        if: steps.spec_files_changed.outputs.any_changed == 'true'
-        run: |
-          chmod +x scripts/ci_check_models.sh
-          scripts/ci_check_models.sh
-
-      - name: Create specs folders for JSON publishing
-        run: |
-          mkdir -p site/schemas
-          mkdir -p site/services
-          mkdir -p site/handlers
-          mkdir -p site/discovery
-
-      - name: Build Documentation (PR Check)
-        if: github.event_name == 'pull_request'
-        run: mkdocs build --strict
-
-      - name: Deploy development version from main branch
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          mkdocs gh-deploy
+          echo "This workflow is disabled."
+          echo "The repository has been transformed into a .NET API template."
+          echo "See README.md for the new structure and documentation."

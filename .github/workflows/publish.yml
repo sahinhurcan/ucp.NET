@@ -1,8 +1,9 @@
-name: Publish NuGet
+name: Publish to NuGet.org
 
 on:
   release:
     types: [published]
+  workflow_dispatch:  # Allow manual trigger
 
 jobs:
   publish:
@@ -22,8 +23,13 @@ jobs:
     - name: Build
       run: dotnet build src/UCP.NET/UCP.NET.csproj --configuration Release --no-restore
     
-    - name: Pack
+    - name: Pack NuGet package
       run: dotnet pack src/UCP.NET/UCP.NET.csproj --configuration Release --no-build --output ./artifacts
     
-    - name: Publish to NuGet
+    - name: List package contents
+      run: ls -lh ./artifacts/
+    
+    - name: Publish to NuGet.org
       run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

@@ -18,20 +18,20 @@ jobs:
       with:
         dotnet-version: '8.0.x'
     
-    - name: Restore dependencies
+    - name: Restore UCP.NET library dependencies
       run: dotnet restore src/UCP.NET/UCP.NET.csproj
     
-    - name: Build library
+    - name: Build UCP.NET library
       run: dotnet build src/UCP.NET/UCP.NET.csproj --configuration Release --no-restore
     
-    - name: Restore example dependencies
-      run: dotnet restore examples/UCP.CleanArchitecture.sln
+    - name: Restore API template dependencies
+      run: dotnet restore template/UCP.API/UCP.API.csproj
     
-    - name: Build example
-      run: dotnet build examples/UCP.CleanArchitecture.sln --configuration Release --no-restore
+    - name: Build API template
+      run: dotnet build template/UCP.API/UCP.API.csproj --configuration Release --no-restore
     
     - name: Run tests (when available)
-      run: dotnet test --configuration Release --no-build --verbosity normal || echo "No tests found"
+      run: dotnet test --configuration Release --no-build --verbosity normal || echo "No tests found - add your own tests"
 
   pack:
     runs-on: ubuntu-latest
@@ -52,10 +52,10 @@ jobs:
     - name: Build
       run: dotnet build src/UCP.NET/UCP.NET.csproj --configuration Release --no-restore
     
-    - name: Pack
+    - name: Pack NuGet package
       run: dotnet pack src/UCP.NET/UCP.NET.csproj --configuration Release --no-build --output ./artifacts
     
-    - name: Upload artifact
+    - name: Upload NuGet package artifact
       uses: actions/upload-artifact@v4
       with:
         name: nuget-package
