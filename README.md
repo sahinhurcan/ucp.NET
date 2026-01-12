@@ -1,131 +1,199 @@
-<!--
-   Copyright 2026 UCP Authors
+# UCP.NET - Universal Commerce Protocol for .NET
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-       http://www.apache.org/licenses/LICENSE-2.0
+A comprehensive .NET implementation of the [Universal Commerce Protocol (UCP)](https://ucp.dev) - enabling seamless commerce integrations for .NET developers.
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
+## 🎯 Overview
 
-<p align="center">
-  <h1 align="center">Universal Commerce Protocol (UCP)</h1>
-</p>
+This repository provides both a NuGet package and a Clean Architecture example for integrating UCP into .NET applications. UCP is forked from Google's Universal Commerce Protocol specification and adapted for the .NET ecosystem.
 
-<p align="center">
-  <b>An open standard enabling interoperability between various commerce
-   entities to facilitate seamless commerce integrations.</b>
-</p>
+**What is UCP?**
+Universal Commerce Protocol (UCP) is an open standard that enables interoperability between various commerce entities, providing a standardized way to handle checkout, payments, orders, and fulfillment.
 
-<p align="center">
-  <a href="https://ucp.dev">Documentation</a> |
-  <a href="https://ucp.dev/specification/overview">Specification</a> |
-  <a href="https://github.com/Universal-Commerce-Protocol/ucp/discussions">Discussions</a>
-</p>
+## 📦 UCP.NET Library
 
-## Overview
+The core `UCP.NET` library provides:
+- ✅ **Strongly-typed models** for all UCP types (Checkout, Payment, Order, Fulfillment)
+- ✅ **HTTP client** for UCP REST APIs
+- ✅ **Dependency injection** extensions
+- ✅ **Async/await** support throughout
+- ✅ **Configuration** via appsettings.json or code
 
-The Universal Commerce Protocol (UCP) addresses a fragmented commerce landscape
-by providing a standardized common language and functional primitives. It
-enables platforms (like AI agents and apps), businesses, Payment Service
-Providers (PSPs), and Credential Providers (CPs) to communicate effectively,
-ensuring secure and consistent commerce experiences across the web.
+### Installation
 
-With UCP, businesses can:
+```bash
+dotnet add package UCP.NET
+```
 
-*   **Declare** supported capabilities to enable autonomous discovery by
-    platforms.
-*   **Facilitate** secure checkout sessions, with or without human intervention.
-*   **Offer** personalized shopping experiences through standardized data
-    exchange.
+### Quick Start
 
-## Why UCP?
+```csharp
+// Configure in Startup.cs or Program.cs
+builder.Services.AddUcpShoppingClient(options =>
+{
+    options.BaseUrl = "https://merchant.example.com/ucp";
+    options.ApiKey = "your-api-key";
+});
 
-As commerce becomes increasingly agentic and distributed, the ability for
-different systems to interoperate without custom, one-off integrations is vital.
-UCP aims to:
+// Inject and use
+public class CheckoutService
+{
+    private readonly IUcpShoppingClient _ucpClient;
 
-*   **Standardize Interaction:** Provide a uniform way for platforms to interact
-    with businesses, regardless of the underlying backend.
-*   **Modularize Commerce:** Breakdown commerce into distinct **Capabilities**
-    (e.g., Checkout, Order) and **Extensions** (e.g., Discounts,
-    Fulfillment), allowing for flexible implementation.
-*   **Enable Agentic Commerce:** Designed from the ground up to support AI
-    agents acting on behalf of users to discover products, fill carts, and
-    complete purchases securely.
-*   **Enhance Security:** Support for advanced security patterns like AP2
-    mandates and verifiable credentials.
+    public CheckoutService(IUcpShoppingClient ucpClient)
+    {
+        _ucpClient = ucpClient;
+    }
 
-### Key Features
+    public async Task<CheckoutResponse> CreateCheckout()
+    {
+        var request = new CheckoutCreateRequest
+        {
+            Ucp = new UcpMetadata { Version = "2026-01-11" },
+            LineItems = new List<LineItem>
+            {
+                new LineItem
+                {
+                    Id = "product-123",
+                    Quantity = 2
+                }
+            }
+        };
 
-*   **Composable Architecture:** UCP defines **Capabilities** (such as
-    "Checkout" or "Identity Linking") that businesses implement to enable easy
-    integration. On top of that, specific **Extensions** can be added to enhance
-    the consumer experience without bloating the capability definitions.
-*   **Dynamic Discovery:** Businesses declare their supported Capabilities in a
-    standardized profile, allowing platforms to autonomously discover and
-    configure themselves.
-*   **Transport Agnostic:** The protocol is designed to work across various
-    transports. Businesses can offer Capabilities via REST APIs, MCP (Model
-    Context Protocol), or A2A, depending on their infrastructure.
-*   **Built on Standards:** UCP leverages existing open standards for payments,
-    identity, and security wherever applicable, rather than reinventing the
-    wheel.
-*   **Developer Friendly:** A comprehensive set of SDKs and libraries
-    facilitates rapid development and integration.
+        return await _ucpClient.CreateCheckoutAsync(request);
+    }
+}
+```
 
-## Key Capabilities
+For complete API documentation, see [README_NUGET.md](README_NUGET.md).
 
-The initial release focuses on the essential primitives for transacting:
+## 🏗️ Clean Architecture Example
 
-*   **Checkout:** Facilitates checkout sessions including cart management and
-    tax calculation, supporting flows with or without human intervention.
-*   **Identity Linking:** Enables platforms to obtain authorization to perform
-    actions on a user's behalf via OAuth 2.0.
-*   **Order:** Webhook-based updates for order lifecycle events (shipped,
-    delivered, returned).
-*   **Payment Token Exchange:** Protocols for PSPs and Credential Providers to
-    securely exchange payment tokens and credentials.
+The `examples/UCP.CleanArchitecture` folder contains a complete example demonstrating:
+- **Clean Architecture** with proper layer separation
+- **MediatR** for CQRS pattern implementation
+- **Domain-Driven Design** principles
+- **Dependency Injection** best practices
+- **ASP.NET Core Web API** with Swagger
 
-## Getting Started
+### Example Structure
 
-*   📚 **Explore the Documentation:** Visit [ucp.dev](https://ucp.dev) for a
-    complete overview, the full protocol specification, tutorials, and guides.
-*   🎬 **Review our
-    [samples](https://github.com/Universal-Commerce-Protocol/samples)** for
-    implementation examples.
-*   🛠️ **Use our
-    [SDKs](https://github.com/orgs/Universal-Commerce-Protocol/repositories)**
-    to start building your own integrations.
-*   📝 **Check conformance** with our [conformance tests](https://github.com/Universal-Commerce-Protocol/conformance).
+```
+examples/UCP.CleanArchitecture/
+├── Domain/              # Entities, Value Objects, Interfaces
+│   ├── Entities/        # ShoppingCart, Order
+│   └── Interfaces/      # Repository interfaces
+├── Application/         # Use Cases with MediatR
+│   ├── UseCases/
+│   │   ├── Checkout/    # Checkout commands and queries
+│   │   └── Orders/      # Order commands
+│   └── DTOs/            # Data transfer objects
+├── Infrastructure/      # UCP Integration, Repositories
+│   └── Repositories/    # In-memory implementations
+└── API/                 # ASP.NET Core Web API
+    └── Controllers/     # REST endpoints
+```
 
-## Contributing
+### Running the Example
 
-We welcome community contributions to enhance and evolve UCP.
+```bash
+cd examples/UCP.CleanArchitecture/src/API
+dotnet run
+```
 
-*   **Questions & Discussions:** Join our [GitHub
-    Discussions](https://github.com/Universal-Commerce-Protocol/ucp/discussions).
-*   **Issues & Feedback:** Report issues or suggest improvements via GitHub
-    Issues.
-*   **Contribution Guide:** See our [CONTRIBUTING.md](CONTRIBUTING.md) for
-    details on how to contribute.
+Then open `https://localhost:5001/swagger` to see the API documentation.
 
-## What's Next
+For detailed information, see [examples/UCP.CleanArchitecture/README.md](examples/UCP.CleanArchitecture/README.md).
 
-Take a look at [our roadmap on ucp.dev](https://ucp.dev/documentation/roadmap/).
-Future enhancements include:
+## 🚀 Features
 
-*   **New Verticals:** Applications beyond Shopping (e.g., Travel, Services).
-*   **Loyalty:** Standardized management of loyalty programs and rewards.
-*   **Personalization:** Enhanced signals for personalized product discovery.
+### Core Library Features
+- **Type-safe Models**: All UCP schema types mapped to C# classes
+- **HTTP Client**: Full REST API client implementation
+- **Configuration**: Flexible configuration via appsettings or code
+- **Error Handling**: Proper exception handling and error messages
+- **Async Support**: Full async/await pattern support
+- **Extensibility**: Easy to extend with custom capabilities
 
-## About
+### Example Application Features
+- **Clean Architecture**: Proper separation of concerns
+- **CQRS with MediatR**: Command Query Responsibility Segregation
+- **RESTful API**: Standard REST endpoints
+- **Swagger/OpenAPI**: Interactive API documentation
+- **In-Memory Storage**: Easy to run and test
 
-UCP is an open-source project under the [Apache License 2.0](LICENSE) and is
-open to contributions from the community.
+## 📚 Documentation
+
+- [NuGet Package Documentation](README_NUGET.md) - Complete API reference
+- [Example Application Guide](examples/UCP.CleanArchitecture/README.md) - Clean Architecture tutorial
+- [UCP Specification](https://ucp.dev/specification/overview) - Protocol specification
+- [UCP Documentation](https://ucp.dev) - Official UCP docs
+
+## 🛠️ Development
+
+### Building from Source
+
+```bash
+# Clone the repository
+git clone https://github.com/sahinhurcan/ucp.NET.git
+cd ucp.NET
+
+# Build the library
+dotnet build src/UCP.NET/UCP.NET.csproj
+
+# Build the example
+dotnet build examples/UCP.CleanArchitecture.sln
+
+# Run tests (when available)
+dotnet test
+```
+
+### Project Structure
+
+```
+ucp.NET/
+├── src/
+│   └── UCP.NET/           # Core library
+│       ├── Models/        # UCP models
+│       ├── Client/        # HTTP client
+│       ├── Configuration/ # Options
+│       └── Extensions/    # DI extensions
+├── examples/
+│   └── UCP.CleanArchitecture/  # Full example app
+├── tests/                 # Unit and integration tests
+├── spec/                  # UCP specification (JSON schemas)
+└── docs/                  # Documentation
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## 📄 License
+
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+
+## 🌟 About UCP
+
+Universal Commerce Protocol (UCP) is forked from Google's Universal Commerce Protocol and adapted for the .NET ecosystem. UCP is an open standard enabling interoperability between various commerce entities.
+
+### Original UCP Resources
+- 📚 [UCP Documentation](https://ucp.dev)
+- 📋 [UCP Specification](https://ucp.dev/specification/overview)
+- 💬 [UCP Discussions](https://github.com/Universal-Commerce-Protocol/ucp/discussions)
+
+### This Repository
+- 🔧 [Report Issues](https://github.com/sahinhurcan/ucp.NET/issues)
+- 💡 [Feature Requests](https://github.com/sahinhurcan/ucp.NET/issues)
+- 🌐 [NuGet Package](https://www.nuget.org/packages/UCP.NET/) (coming soon)
+
+## 🙏 Acknowledgments
+
+- Original UCP specification by Google and the UCP community
+- Clean Architecture principles by Robert C. Martin
+- MediatR library by Jimmy Bogard
+
+---
+
+Made with ❤️ for the .NET community
